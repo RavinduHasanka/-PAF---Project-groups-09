@@ -40,7 +40,7 @@ public class PaymentService {
 		 JsonObject paymentObject = new JsonParser().parse(paymentData).getAsJsonObject();
 		 
 		//Read the values from the JSON object
-		 String paymentID = paymentObject.get("paymenyID").getAsString();
+		 String paymentID = paymentObject.get("paymentID").getAsString();
 		 String amount = paymentObject.get("amount").getAsString();
 		 String payment_date = paymentObject.get("payment_date").getAsString();
 		 String card_number = paymentObject.get("card_number").getAsString();
@@ -73,11 +73,10 @@ public class PaymentService {
 				
 		{
 				 
-				String output = paymentObj.insertPaymentDetails( amount, payment_date,card_number ,expire_mon_yer, cvc, card_holder_name,type);
-				 
+				String output = paymentObj.insertPaymentDetails(amount, payment_date, card_number, expire_mon_yer, cvc, card_holder_name, type);
 				return output;
 		}
-	
+		//Delete Payment Details
 		@DELETE
 		@Path("/")
 		@Consumes(MediaType.APPLICATION_XML)

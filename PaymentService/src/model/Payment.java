@@ -12,7 +12,7 @@ public class Payment {
 			try {
 				Class.forName("com.mysql.jdbc.Driver");
 				
-				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/gadget_badget", "root", "root");
+				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/gadget_badget", "root", "");
 			}
 			
 			catch(Exception e) 
@@ -36,8 +36,7 @@ public class Payment {
 				}
 				
 				//Insert query 
-				String query = "insert into payment (`paymentID`, `amount`, `payment_date`,'card_number' `expire_mon_yer`, `cvc`, `card_holder_name`,`type`)"
-						+ " values (?, ?, ?, ?, ?, ?, ?, ?) ";
+				String query = "insert into payment (`paymentID`, `amount`,`payment_date`,`card_number`,`expire_mon_yer`, `cvc`,`card_holder_name`,`type`) values (?, ?, ?, ?, ?, ?, ?, ?) ";
 				
 				PreparedStatement preparedStat = con.prepareStatement(query);
 				
@@ -59,7 +58,7 @@ public class Payment {
 			
 			catch(Exception e) 
 			{
-				result = "Error while inserting the user.";
+				result = "Error while inserting the payment.";
 				System.err.println(e.getMessage());
 			}
 			
@@ -85,7 +84,7 @@ public class Payment {
 						+ "<th>Payment Date</th>"
 						+ "<th>Card Number</th> "
 						+ "<th>Expire Month/Year</th> "
-						+ "<th>cvc</th> "
+						+ "<th>CVC</th> "
 						+ "<th>Card Holder Name</th> "
 						+ "<th>Type</th> "
 						+ "<th>Update</th> <th>Remove</th> </tr>";
@@ -96,13 +95,13 @@ public class Payment {
 				
 				while (rs.next()) 
 				{
-					String paymentID = Integer.toString(rs.getInt("PaymentID"));
-					String amount = rs.getString("Amount");
-					String payment_date = rs.getString("Payment Date");
-					String card_number = rs.getString("Card Number");
-					String expire_mon_yer = rs.getString("Expire Month/Year");
+					String paymentID = Integer.toString(rs.getInt("paymentID"));
+					String amount = rs.getString("amount");
+					String payment_date = rs.getString("payment_date");
+					String card_number = rs.getString("card_number");
+					String expire_mon_yer = rs.getString("expire_mon_yer");
 					String cvc = rs.getString("cvc");
-					String card_holder_name = rs.getString("Card Holder Name");
+					String card_holder_name = rs.getString("card_holder_name");
 					String type = rs.getString("type");
 					
 					result += "<tr><td>" + amount + "</td>";
@@ -130,7 +129,7 @@ public class Payment {
 			
 			catch(Exception e) 
 			{
-				result = "Error while reading the user.";
+				result = "Error while reading the payment.";
 				System.err.println(e.getMessage());
 			}
 			
@@ -162,8 +161,8 @@ public class Payment {
 				preparedStat.setString(4, expire_mon_yer);
 				preparedStat.setString(5, cvc);
 				preparedStat.setString(6, card_holder_name);
-				preparedStat.setString(9, type);
-				preparedStat.setInt(10, Integer.parseInt(paymentID));
+				preparedStat.setString(7, type);
+				preparedStat.setInt(8, Integer.parseInt(paymentID));
 				
 				preparedStat.execute();
 				con.close();
@@ -195,7 +194,7 @@ public class Payment {
 				} 
 				
 				//Delete query
-				String query = "delete from user where paymentID=?";
+				String query = "delete from payment where paymentID=?";
 				
 				PreparedStatement preparedStat = con.prepareStatement(query);
 				
@@ -210,7 +209,7 @@ public class Payment {
 			
 			catch(Exception e) 
 			{	
-				result = "Error while deleting the user.";
+				result = "Error while deleting the payment.";
 				System.err.println(e.getMessage());
 			}
 			
