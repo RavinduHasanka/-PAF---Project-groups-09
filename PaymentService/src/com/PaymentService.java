@@ -26,29 +26,7 @@ public class PaymentService {
 			return paymentObj.readPaymentDetails();
 		}
 		
-		//Insert Payment Details
-		@POST
-		@Path("/")
-		@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-		@Produces(MediaType.TEXT_PLAIN)
 		
-		public String insertPaymentDetails(
-				
-  		 
-		 @FormParam("amount") String amount,
-		 @FormParam("payment_date") String payment_date,
-		 @FormParam("card_number") String card_number,
-		 @FormParam("expire_mon_yer") String expire_mon_yer,
-		 @FormParam("cvc") String cvc,
-		 @FormParam("card_holder_name") String card_holder_name,
-		 @FormParam("type") String type)
-		
-		{
-		 
-			String output = paymentObject.insertPaymentDetails( amount, payment_date,card_number ,expire_mon_yer, cvc, card_holder_name,type);
-		 
-			return output;
-		}
 		
 		//Update Payment Details
 		@PUT
@@ -75,8 +53,31 @@ public class PaymentService {
 		 String output = paymentObj.updatePaymentDetails(paymentID, amount, payment_date, card_number ,expire_mon_yer, cvc, card_holder_name,type);
 		 
 		return output;
+		}		
+
+		//Insert Payment Details
+			@POST
+			@Path("/")
+			@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+			@Produces(MediaType.TEXT_PLAIN)
+				
+			public String insertPaymentDetails(		
+		  		 
+				@FormParam("amount") String amount,
+				@FormParam("payment_date") String payment_date,
+				@FormParam("card_number") String card_number,
+				@FormParam("expire_mon_yer") String expire_mon_yer,
+				@FormParam("cvc") String cvc,
+				@FormParam("card_holder_name") String card_holder_name,
+				@FormParam("type") String type)
+				
+		{
+				 
+				String output = paymentObj.insertPaymentDetails( amount, payment_date,card_number ,expire_mon_yer, cvc, card_holder_name,type);
+				 
+				return output;
 		}
-		
+	
 		@DELETE
 		@Path("/")
 		@Consumes(MediaType.APPLICATION_XML)
