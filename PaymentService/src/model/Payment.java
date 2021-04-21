@@ -28,41 +28,63 @@ public class Payment {
 			
 			String result = "";
 			
-			try {
-				Connection con = connect();
-				
-				if (con == null) {
-					return "Error while connecting to the database for inserting.";
+			//validation for card No & Card Verification Code
+			String cardNoValid = "^[0-9]{16}$";
+			String cvcValid = "^[0-9]{3}$";
+			
+			if(amount.isEmpty() || payment_date.isEmpty() || card_number.isEmpty() || expire_mon_yer.isEmpty() || cvc.isEmpty() || card_holder_name.isEmpty() || type.isEmpty()) {
+				result = "Cannot Insert Empty Fields! ";
+			}
+			else if(!(card_number.matches(cardNoValid))) 
+				{
+				result = "Invalid Card Number!";
+				}
+			else if(!(cvc.matches(cvcValid))) 
+				{
+				result = "Invalid cvc!";
+				}
+			else if(card_holder_name.length()> 10)
+				{
+				result = "Card Holder Name Characters is exceeded ! Try Again";
+				}
+			else
+				{
+				try {
+					Connection con = connect();
+					
+					if (con == null) {
+						return "Error while connecting to the database for inserting.";
+					}
+					
+					//Insert query 
+					String query = "insert into payment (`paymentID`, `amount`,`payment_date`,`card_number`,`expire_mon_yer`, `cvc`,`card_holder_name`,`type`) values (?, ?, ?, ?, ?, ?, ?, ?) ";
+					
+					PreparedStatement preparedStat = con.prepareStatement(query);
+					
+					preparedStat.setInt(1, 0);
+					preparedStat.setString(2, amount);
+					preparedStat.setString(3, payment_date);
+					preparedStat.setString(4, card_number);
+					preparedStat.setString(5, expire_mon_yer);
+					preparedStat.setString(6, cvc);
+					preparedStat.setString(7, card_holder_name);
+					preparedStat.setString(8, type);
+					
+					preparedStat.execute();
+					con.close();
+					
+					result = "Insert Successfully";
+					
 				}
 				
-				//Insert query 
-				String query = "insert into payment (`paymentID`, `amount`,`payment_date`,`card_number`,`expire_mon_yer`, `cvc`,`card_holder_name`,`type`) values (?, ?, ?, ?, ?, ?, ?, ?) ";
-				
-				PreparedStatement preparedStat = con.prepareStatement(query);
-				
-				preparedStat.setInt(1, 0);
-				preparedStat.setString(2, amount);
-				preparedStat.setString(3, payment_date);
-				preparedStat.setString(4, card_number);
-				preparedStat.setString(5, expire_mon_yer);
-				preparedStat.setString(6, cvc);
-				preparedStat.setString(7, card_holder_name);
-				preparedStat.setString(8, type);
-				
-				preparedStat.execute();
-				con.close();
-				
-				result = "Insert Successfully";
-				
+				catch(Exception e) 
+				{
+					result = "Error while inserting the payment.";
+					System.err.println(e.getMessage());
+				}
 			}
-			
-			catch(Exception e) 
-			{
-				result = "Error while inserting the payment.";
-				System.err.println(e.getMessage());
-			}
-			
-			return result;
+				return result;
+				
 			
 		}
 		
@@ -142,41 +164,63 @@ public class Payment {
 			
 			String result = "";
 			
-			try {
-				Connection con = connect();
-				
-				if (con == null) 
+			//validation for card No & Card Verification Code
+			String cardNoValid = "^[0-9]{16}$";
+			String cvcValid = "^[0-9]{3}$";
+			
+			if(amount.isEmpty() || payment_date.isEmpty() || card_number.isEmpty() || expire_mon_yer.isEmpty() || cvc.isEmpty() || card_holder_name.isEmpty() || type.isEmpty()) {
+				result = "Cannot Insert Empty Fields! ";
+			}
+			else if(!(card_number.matches(cardNoValid))) 
 				{
-					return "Error while connecting to the database for updating.";
+				result = "Invalid Card Number!";
+				}
+			else if(!(cvc.matches(cvcValid))) 
+				{
+				result = "Invalid cvc!";
+				}
+			else if(card_holder_name.length()> 10)
+				{
+				result = "Card Holder Name Characters is exceeded ! Try Again";
+				}
+			else
+				{
+			
+				try {
+					Connection con = connect();
+					
+					if (con == null) 
+					{
+						return "Error while connecting to the database for updating.";
+					}
+					
+					//Update query
+					String query = "update payment set amount=?, payment_date=?, card_number=?, expire_mon_yer=?, cvc=?, card_holder_name=?,type=? where paymentID=?";
+					
+					PreparedStatement preparedStat = con.prepareStatement(query);
+					
+					preparedStat.setString(1, amount);
+					preparedStat.setString(2, payment_date);
+					preparedStat.setString(3,card_number);
+					preparedStat.setString(4, expire_mon_yer);
+					preparedStat.setString(5, cvc);
+					preparedStat.setString(6, card_holder_name);
+					preparedStat.setString(7, type);
+					preparedStat.setInt(8, Integer.parseInt(paymentID));
+					
+					preparedStat.execute();
+					con.close();
+					
+					result = "Update Successfully";
+					
 				}
 				
-				//Update query
-				String query = "update payment set amount=?, payment_date=?, card_number=?, expire_mon_yer=?, cvc=?, card_holder_name=?,type=? where paymentID=?";
-				
-				PreparedStatement preparedStat = con.prepareStatement(query);
-				
-				preparedStat.setString(1, amount);
-				preparedStat.setString(2, payment_date);
-				preparedStat.setString(3,card_number);
-				preparedStat.setString(4, expire_mon_yer);
-				preparedStat.setString(5, cvc);
-				preparedStat.setString(6, card_holder_name);
-				preparedStat.setString(7, type);
-				preparedStat.setInt(8, Integer.parseInt(paymentID));
-				
-				preparedStat.execute();
-				con.close();
-				
-				result = "Update Successfully";
-				
-			}
-			
-			catch(Exception e) 
-			{
-				result = "Error while updating the Payment.";
-				System.err.println(e.getMessage());
-			}
-			
+				catch(Exception e) 
+				{
+					result = "Error while updating the Payment.";
+					System.err.println(e.getMessage());
+				}
+			}	
 			return result;
 		}
 		
