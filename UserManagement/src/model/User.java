@@ -4,7 +4,9 @@ import java.sql.*;
 
 public class User {
 	
-	//Connect to the DB
+	
+	//----------------------------------------Connect to the DB-------------------------------------------
+	
 	private Connection connect() {
 		Connection con = null;
 		
@@ -22,70 +24,89 @@ public class User {
 		return con;
 	}
 	
-	//Insert User Details Method
+	//-----------------------------------------Insert User Details Method---------------------------------------------
+	
 	public String insertUserDetails(String fname, String lname, String nic, String address, String phone, String email, String username, String password, String type) {
 		
 		String result = "";
-		String emailValid = "^(.+)@(.+)$";
-		String nicValid = "^[0-9]{9}[vVxX]$";
 		
-		try {
-			Connection con = connect();
+		//Validation part
+		String emailValid = "^(.+)@(.+)$";
+		String nicValid1 = "^[0-9]{9}[vV]$";
+		String nicValid2  = "^[0-9]{12}$";
+		String phoneValid = "^[0-9]{10}$";
+		
+		if(fname.isEmpty() || lname.isEmpty() || nic.isEmpty() || address.isEmpty() || phone.isEmpty() || email.isEmpty() || username.isEmpty() || password.isEmpty()) {
+			result = "Cannot Insert Empty Fields! ";
+		}
+		
+		else if(!(nic.matches(nicValid1) || nic.matches(nicValid2))) {
+			result = "Invalid NIC Number!";
+		}
+		
+		else if(!(phone.matches(phoneValid))) {
+			result = "Invalid Phone Number!";
+		}
+		
+		else if(!(email.matches(emailValid))) {
+			result = "Invalid Email Address!";
+		}
 			
-			if (con == null) {
-				return "Error while connecting to the database for inserting.";
-			}
+		
+		else if(password.length() < 6) {
+			result = "Password is not Strong!";
+		}
+		
+		else {
+		
+			try {
+				Connection con = connect();
+				
+				if (con == null) {
+					return "Error while connecting to the database for inserting.";
+				}
+				
+				//Insert query 
+				String query = "insert into user (`userID`, `fname`, `lname`, `nic`, `address`, `phone`, `email`, `username`, `password`, `type`)"
+						+ " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
+				
+				PreparedStatement preparedStat = con.prepareStatement(query);
+				
+				preparedStat.setInt(1, 0);
+				preparedStat.setString(2, fname);
+				preparedStat.setString(3, lname);
+				preparedStat.setString(4, nic);
+				preparedStat.setString(5, address);
+				preparedStat.setString(6, phone);
+				preparedStat.setString(7, email);
+				preparedStat.setString(8, username);
+				preparedStat.setString(9, password);
+				preparedStat.setString(10, "Buyer");
+							
 			
-			//Insert query 
-			String query = "insert into user (`userID`, `fname`, `lname`, `nic`, `address`, `phone`, `email`, `username`, `password`, `type`)"
-					+ " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
-			
-			PreparedStatement preparedStat = con.prepareStatement(query);
-			
-			preparedStat.setInt(1, 0);
-			preparedStat.setString(2, fname);
-			preparedStat.setString(3, lname);
-			preparedStat.setString(4, nic);
-			preparedStat.setString(5, address);
-			preparedStat.setString(6, phone);
-			preparedStat.setString(7, email);
-			preparedStat.setString(8, username);
-			preparedStat.setString(9, password);
-			preparedStat.setString(10, "Buyer");
-			
-			if(password.length() < 6) {
-				result = "Password is not Strong!";
-			}
-			
-			if(!(email.matches(emailValid))) {
-				result = "Invalid Email Address!";
-			}
-			
-			if(!(nic.matches(nicValid)) || nic.length() == 12) {
-				result = "Invalid NIC Number!";
-			}
-			
-			else {
 				preparedStat.execute();
 				con.close();
 				
 				result = "User Registation Successfully.";
 				
-			}		
+					
 			
+			}
+			catch(Exception e) 
+			{
+				result = "Error while inserting the user.";
+				System.err.println(e.getMessage());
+			}
 		}
 		
-		catch(Exception e) 
-		{
-			result = "Error while inserting the user.";
-			System.err.println(e.getMessage());
-		}
+		
 		
 		return result;
 		
 	}
 	
-	//Read User Details Method
+	//-------------------------------------------------Read User Details Method--------------------------------------------
+	
 	public String readUserDetails() {
 		
 		String result = "";
@@ -161,7 +182,8 @@ public class User {
 		
 	}
 	
-	//Read details of relevant user type	
+	//---------------------------------------------Read details of relevant user type------------------------------------
+	
 	public String readUserType(String type) {
 		
 		String result = "";
@@ -186,6 +208,7 @@ public class User {
 					//+ "<th>Update</th> <th>Remove</th> </tr>";
 			
 			String query = "select * from user where type=?";
+			
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 			preparedStmt.setString(1, type);
 			ResultSet rs = preparedStmt.executeQuery();
@@ -238,88 +261,128 @@ public class User {
 	}
 	
 	
-	//Update User Details Method
+	//-----------------------------------------Update User Details Method--------------------------------------------------
+	
 	public String updateUserDetails(String userID, String fname, String lname, String nic, String address, String phone, String email, String username, String password) {
 		
 		String result = "";
 		
-		try {
-			Connection con = connect();
-			
-			if (con == null) 
-			{
-				return "Error while connecting to the database for updating.";
-			}
-			
-			//Update query
-			String query = "update user set fname=?, lname=?, nic=?, address=?, phone=?, email=?, username=?, password=? where userID=?";
-			
-			PreparedStatement preparedStat = con.prepareStatement(query);
-			
-			preparedStat.setString(1, fname);
-			preparedStat.setString(2, lname);
-			preparedStat.setString(3, nic);
-			preparedStat.setString(4, address);
-			preparedStat.setString(5, phone);
-			preparedStat.setString(6, email);
-			preparedStat.setString(7, username);
-			preparedStat.setString(8, password);
-			//preparedStat.setString(9, type);
-			preparedStat.setInt(9, Integer.parseInt(userID));
-			
-			preparedStat.execute();
-			con.close();
-			
-			result = "User Update Successfully";
-			
+		//Validation part
+		String emailValid = "^(.+)@(.+)$";
+		String nicValid1 = "^[0-9]{9}[vV]$";
+		String nicValid2  = "^[0-9]{12}$";
+		String phoneValid = "^[0-9]{10}$";
+		
+		if(fname.isEmpty() || lname.isEmpty() || nic.isEmpty() || address.isEmpty() || phone.isEmpty() || email.isEmpty() || username.isEmpty() || password.isEmpty()) {
+			result = "Cannot Insert Empty Fields! ";
 		}
 		
-		catch(Exception e) 
-		{
-			result = "Error while updating the user.";
-			System.err.println(e.getMessage());
+		else if(!(nic.matches(nicValid1) || nic.matches(nicValid2))) {
+			result = "Invalid NIC Number!";
+		}
+		
+		else if(!(phone.matches(phoneValid))) {
+			result = "Invalid Phone Number!";
+		}
+		
+		else if(!(email.matches(emailValid))) {
+			result = "Invalid Email Address!";
+		}
+			
+		
+		else if(password.length() < 6) {
+			result = "Password is not Strong!";
+		}
+		
+		else {
+		
+			try {
+				Connection con = connect();
+				
+				if (con == null) 
+				{
+					return "Error while connecting to the database for updating.";
+				}
+				
+				//Update query
+				String query = "update user set fname=?, lname=?, nic=?, address=?, phone=?, email=?, username=?, password=? where userID=?";
+				
+				PreparedStatement preparedStat = con.prepareStatement(query);
+				
+				preparedStat.setString(1, fname);
+				preparedStat.setString(2, lname);
+				preparedStat.setString(3, nic);
+				preparedStat.setString(4, address);
+				preparedStat.setString(5, phone);
+				preparedStat.setString(6, email);
+				preparedStat.setString(7, username);
+				preparedStat.setString(8, password);
+				//preparedStat.setString(9, type);
+				preparedStat.setInt(9, Integer.parseInt(userID));
+				
+				preparedStat.execute();
+				con.close();
+				
+				result = "User Update Successfully";
+				
+			}
+			
+			catch(Exception e) 
+			{
+				result = "Error while updating the user.";
+				System.err.println(e.getMessage());
+			}
 		}
 		
 		return result;
 	}
 	
-	//Delete User Details Method
+	//----------------------------------------------Delete User Details Method----------------------------------------------
+	
 	public String deleteUserDetails (String userID) {
 		
 		String result = "";
 		
-		try {
-			Connection con = connect();
-			
-			if (con == null) 
-			{
-				return "Error while connecting to the database for deleting.";
-			} 
-			
-			//Delete query
-			String query = "delete from user where userID=?";
-			
-			PreparedStatement preparedStat = con.prepareStatement(query);
-			
-			preparedStat.setInt(1, Integer.parseInt(userID));
-			
-			preparedStat.execute();
-			con.close();
-			
-			result = "User Deleted Successfully";
-			
+		if(userID.isEmpty()) {
+			result = "Please Insert UserID!";
 		}
 		
-		catch(Exception e) 
-		{	
-			result = "Error while deleting the user.";
-			System.err.println(e.getMessage());
+		else {		
+		
+			try {
+				Connection con = connect();
+				
+				if (con == null) 
+				{
+					return "Error while connecting to the database for deleting.";
+				} 
+				
+				//Delete query
+				String query = "delete from user where userID=?";
+				
+				PreparedStatement preparedStat = con.prepareStatement(query);
+				
+				preparedStat.setInt(1, Integer.parseInt(userID));
+				
+				preparedStat.execute();
+				con.close();
+				
+				result = "User Deleted Successfully";
+				
+			}
+			
+			catch(Exception e) 
+			{	
+				result = "Error while deleting the user.";
+				System.err.println(e.getMessage());
+			}
 		}
 		
 		return result;
 	}
 	
-	//View User Details Method
+	//--------------------------------------------------View User Details Method------------------------------------
+	
 	public String viewUserPfofile(String userID) {
 			
 			String result = "";		
@@ -397,7 +460,8 @@ public class User {
 			
 	}
 	
-	//Registered User Login Method
+	//-------------------------------------------Registered User Login Method-------------------------------------------
+	
 	public String login(String username, String password) {
 
 		try {
@@ -411,17 +475,14 @@ public class User {
 			System.out.println("wor");
 			String query = "select `username`,`password` from `user` where `username` = ? and `password` = ?";
 			
-			PreparedStatement preparedStat = con.prepareStatement(query);
+			PreparedStatement preparedStat = con.prepareStatement(query);			
 			
-			//System.out.println("1111");
 			System.out.println(preparedStat);
 			System.out.println(username);
 			System.out.println(password);
 			
 			preparedStat.setString(1, username);
 			preparedStat.setString(2, password);
-			//System.out.println("222");
-			
 			
 			ResultSet rs = preparedStat.executeQuery();
 
@@ -429,19 +490,17 @@ public class User {
 			if(rs.next()) {
 				
 				con.close();
-				return "Welcome"+" "+username+". "+"Successfully logged in.";
+				return "Welcome "+ username +". "+"You are Successfully logged in.";
 			}
 			
 			else {
 				con.close();
 				
 				if(username.equals("")) {
-					
 					return "Username cannot be empty";
 				}
 				
 				else if(password.equals("")) {
-					
 					return "Password cannot be empty";
 				}
 				else {
@@ -459,21 +518,6 @@ public class User {
 		}
 
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+		
 }
 

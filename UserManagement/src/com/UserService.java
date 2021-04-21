@@ -13,6 +13,9 @@ import org.jsoup.nodes.Document;
 
 @Path("/User")
 public class UserService {
+	
+	
+	
 	User userObj = new User();
 	
 	//Read User Details
@@ -40,6 +43,7 @@ public class UserService {
 	@GET
 	@Path("/{type}")
 	@Produces(MediaType.TEXT_PLAIN)
+	
 	public String readUserType(@PathParam("type") String type) {
 		return userObj.readUserType(type) ; 
 	}
@@ -50,21 +54,21 @@ public class UserService {
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.TEXT_PLAIN)
 	
-	public String insertUserDetails(@FormParam("fname") String fname,
-	 
-	 @FormParam("lname") String lname,
-	 @FormParam("nic") String nic,
-	 @FormParam("address") String address,
-	 @FormParam("phone") String phone,
-	 @FormParam("email") String email,
-	 @FormParam("username") String username,
-	 @FormParam("password") String password,
-	 @FormParam("type") String type)
+	public String insertUserDetails(
+		
+		 @FormParam("fname") String fname,
+		 @FormParam("lname") String lname,
+		 @FormParam("nic") String nic,
+		 @FormParam("address") String address,
+		 @FormParam("phone") String phone,
+		 @FormParam("email") String email,
+		 @FormParam("username") String username,
+		 @FormParam("password") String password,
+		 @FormParam("type") String type)
 	
 	{
 	 
-		String output = userObj.insertUserDetails(fname, lname, nic, address, phone, email, username, password, type);
-	 
+		String output = userObj.insertUserDetails(fname, lname, nic, address, phone, email, username, password, type);	 
 		return output;
 	}
 	
@@ -73,27 +77,28 @@ public class UserService {
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
+	
 	public String updateUserDetails(String userData)
 	{
 		
-	//Convert the input string to a JSON object
-	 JsonObject userObject = new JsonParser().parse(userData).getAsJsonObject();
-	 
-	 //Read the values from the JSON object
-	 String userID = userObject.get("userID").getAsString();
-	 String fname = userObject.get("fname").getAsString();
-	 String lname = userObject.get("lname").getAsString();
-	 String nic = userObject.get("nic").getAsString();
-	 String address = userObject.get("address").getAsString();
-	 String phone = userObject.get("phone").getAsString();
-	 String email = userObject.get("email").getAsString();
-	 String username = userObject.get("username").getAsString();
-	 String password = userObject.get("password").getAsString();
-	 //String type = userObject.get("type").getAsString();
-	 
-	 String output = userObj.updateUserDetails(userID, fname, lname, nic, address, phone, email, username, password);
-	  
-	 return output;
+		 //Convert the input string to a JSON object
+		 JsonObject userObject = new JsonParser().parse(userData).getAsJsonObject();
+		 
+		 //Read the values from the JSON object
+		 String userID = userObject.get("userID").getAsString();
+		 String fname = userObject.get("fname").getAsString();
+		 String lname = userObject.get("lname").getAsString();
+		 String nic = userObject.get("nic").getAsString();
+		 String address = userObject.get("address").getAsString();
+		 String phone = userObject.get("phone").getAsString();
+		 String email = userObject.get("email").getAsString();
+		 String username = userObject.get("username").getAsString();
+		 String password = userObject.get("password").getAsString();
+		 //String type = userObject.get("type").getAsString();
+		 
+		 String output = userObj.updateUserDetails(userID, fname, lname, nic, address, phone, email, username, password);
+		  
+		 return output;
 	}
 	
 	//Delete User Details
@@ -101,17 +106,18 @@ public class UserService {
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_XML)
 	@Produces(MediaType.TEXT_PLAIN)
+	
 	public String deleteUserDetails(String userData)
 	{
 		
-	 //Convert the input string to an XML document
-	 Document doc = Jsoup.parse(userData, "", Parser.xmlParser());
-
-	 //Read the value from the element <userID>
-	 String userID = doc.select("userID").text();
-	 String output = userObj.deleteUserDetails(userID);
-	 
-	 return output;
+		 //Convert the input string to an XML document
+		 Document doc = Jsoup.parse(userData, "", Parser.xmlParser());
+	
+		 //Read the value from the element <userID>
+		 String userID = doc.select("userID").text();
+		 String output = userObj.deleteUserDetails(userID);
+		 
+		 return output;
 	}
 	
 	//Login User
