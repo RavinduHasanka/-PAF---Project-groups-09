@@ -45,7 +45,7 @@ public class PaymentService {
 		
 		{
 		 
-			String output = paymentObj.insertPaymentDetails( amount, payment_date,card_number ,expire_mon_yer, cvc, card_holder_name,type);
+			String output = paymentObject.insertPaymentDetails( amount, payment_date,card_number ,expire_mon_yer, cvc, card_holder_name,type);
 		 
 			return output;
 		}
