@@ -2,7 +2,6 @@ package com;
 
 import model.Payment;
 
-import java.util.List;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -12,7 +11,6 @@ import com.google.gson.*;
 import org.jsoup.*;
 import org.jsoup.parser.*;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 
 @Path("/Payment")	
 public class PaymentService {
@@ -61,17 +59,17 @@ public class PaymentService {
 		{
 			
 		//Convert the input string to a JSON object
-		 JsonObject paymentObj = new JsonParser().parse(paymentData).getAsJsonObject();
+		 JsonObject paymentObject = new JsonParser().parse(paymentData).getAsJsonObject();
 		 
 		//Read the values from the JSON object
-		 String paymentID = paymentObj.get("paymenyID").getAsString();
-		 String amount = paymentObj.get("amount").getAsString();
-		 String payment_date = paymentObj.get("payment_date").getAsString();
-		 String card_number = paymentObj.get("card_number").getAsString();
-		 String expire_mon_yer = paymentObj.get("expire_mon_yer").getAsString();
-		 String cvc = paymentObj.get("cvc").getAsString();
-		 String card_holder_name = paymentObj.get("card_holder_name").getAsString();
-		 String type = paymentObj.get("type").getAsString();
+		 String paymentID = paymentObject.get("paymenyID").getAsString();
+		 String amount = paymentObject.get("amount").getAsString();
+		 String payment_date = paymentObject.get("payment_date").getAsString();
+		 String card_number = paymentObject.get("card_number").getAsString();
+		 String expire_mon_yer = paymentObject.get("expire_mon_yer").getAsString();
+		 String cvc = paymentObject.get("cvc").getAsString();
+		 String card_holder_name = paymentObject.get("card_holder_name").getAsString();
+		 String type = paymentObject.get("type").getAsString();
 		 
 		 
 		 String output = paymentObj.updatePaymentDetails(paymentID, amount, payment_date, card_number ,expire_mon_yer, cvc, card_holder_name,type);
