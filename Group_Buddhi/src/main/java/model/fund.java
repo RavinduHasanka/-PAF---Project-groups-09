@@ -21,7 +21,7 @@ public class fund {
 		return con;
 	}
 
-	public String insertItem(String requesterName, String requesterPhone, String requesterMail, String requesterDesc) {
+	public String insertItem(String requesterName, String requesterPhone, String requesterMail, String requesterDesc , String requesterNIC) {
 		String output = "";
 		try {
 			Connection con = connect();
@@ -29,7 +29,7 @@ public class fund {
 				return "Error while connecting to the database for inserting.";
 			}
 			// create a prepared statement
-			String query = "insert into fund (fundID,requesterName,requesterPhone,requesterMail,requesterDesc) values (?, ?, ?, ?, ?);"; 
+			String query = "insert into fund (fundID,requesterName,requesterPhone,requesterMail,requesterDesc,requesterNIC) values (?, ?, ?, ?, ?, ?);"; 
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 			// binding values
 			preparedStmt.setInt(1, 0);
@@ -37,12 +37,13 @@ public class fund {
 			preparedStmt.setString(3, requesterPhone);
 			preparedStmt.setString(4, requesterMail);
 			preparedStmt.setString(5, requesterDesc);
+			preparedStmt.setString(6, requesterNIC);
 			// execute the statement
 			preparedStmt.execute();
 			con.close();
 			output = "Inserted successfully";
 		} catch (Exception e) {
-			output = "Error while inserting the item.";
+			output = e.getMessage()+"  Error while inserting the item.";
 			System.err.println(e.getMessage());
 		}
 		return output;
@@ -57,7 +58,7 @@ public class fund {
 			}
 			// Prepare the html table to be displayed
 			output = "<table border='1'><tr><th>Requester Name</th><th>Requester Phone</th>" + "<th>Requester Mail</th>"
-					+ "<th>Requester Description</th>" + "<th>Update</th><th>Remove</th></tr>";
+					+ "<th>Requester Description</th>" + "<th>Requester NIC</th>" +"<th>Update</th><th>Remove</th></tr>";
 
 			String query = "select * from fund";
 			Statement stmt = con.createStatement();
@@ -67,13 +68,15 @@ public class fund {
 				String fundID = Integer.toString(rs.getInt("fundID")); 
 				 String requesterName = rs.getString("requesterName"); 
 				 String requesterPhone = rs.getString("requesterPhone"); 
-				 String requesterMail = Double.toString(rs.getDouble("requesterMail")); 
+				 String requesterMail = rs.getString("requesterMail"); 
 				 String requesterDesc = rs.getString("requesterDesc"); 
+				 String requesterNIC = rs.getString("requesterNIC");
 				 // Add into the html table
 				 output += "<tr><td>" + requesterName + "</td>"; 
 				 output += "<td>" + requesterPhone + "</td>"; 
 				 output += "<td>" + requesterMail + "</td>"; 
 				 output += "<td>" + requesterDesc + "</td>"; 
+				 output += "<td>" + requesterNIC + "</td>";
 				 // buttons
 				 output += "<td><input name='btnUpdate' type='button' value='Update' "
 				 		+ "class='btn btn-secondary'></td>"
@@ -93,7 +96,7 @@ public class fund {
 		return output;
 	}
 
-	public String updateItem(String fundID, String requesterName, String requesterPhone, String requesterMail, String requesterDesc) {
+	public String updateItem(String fundID, String requesterName, String requesterPhone, String requesterMail, String requesterDesc ,String requesterNIC) {
 		String output = "";
 		try {
 			Connection con = connect();
@@ -101,7 +104,7 @@ public class fund {
 				return "Error while connecting to the database for updating.";
 			}
 			// create a prepared statement
-			String query = "UPDATE fund SET requesterName=?,requesterPhone=?,requesterMail=?,requesterDesc=? "
+			String query = "UPDATE fund SET requesterName=?,requesterPhone=?,requesterMail=?,requesterDesc=? ,requesterNIC=? "
 					+ "WHERE fundID=?";
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 			// binding values
@@ -109,7 +112,8 @@ public class fund {
 			preparedStmt.setString(2, requesterPhone);
 			preparedStmt.setString(3, requesterMail);
 			preparedStmt.setString(4, requesterDesc);
-			preparedStmt.setInt(5, Integer.parseInt(fundID));
+			preparedStmt.setString(5, requesterNIC);
+			preparedStmt.setInt(6, Integer.parseInt(fundID));
 			// execute the statement
 			preparedStmt.execute();
 			con.close();
