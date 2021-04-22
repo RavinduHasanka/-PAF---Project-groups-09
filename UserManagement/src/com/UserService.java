@@ -20,7 +20,7 @@ public class UserService {
 	
 	//Read User Details
 	@GET
-	@Path("/")
+	@Path("/View/")
 	@Produces(MediaType.TEXT_HTML)
 	
 	public String readUserDetails() 
@@ -50,7 +50,7 @@ public class UserService {
 	
 	//Insert User Details
 	@POST
-	@Path("/")
+	@Path("/Create/")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.TEXT_PLAIN)
 	
@@ -74,7 +74,7 @@ public class UserService {
 	
 	//Update User Details
 	@PUT
-	@Path("/")
+	@Path("/Update/")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
 	
@@ -103,7 +103,7 @@ public class UserService {
 	
 	//Delete User Details
 	@DELETE
-	@Path("/")
+	@Path("/Delete/")
 	@Consumes(MediaType.APPLICATION_XML)
 	@Produces(MediaType.TEXT_PLAIN)
 	
