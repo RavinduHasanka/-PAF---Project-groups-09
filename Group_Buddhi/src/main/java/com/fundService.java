@@ -41,7 +41,13 @@ public class fundService {
 							@FormParam("requesterDesc") String requesterDesc,
 							@FormParam("requesterNIC") String requesterNIC) 
 	{ 
-		String output = fundObj.insertItem(requesterName, requesterPhone, requesterMail, requesterDesc,requesterNIC); 
+		String output = "";
+		if( requesterName.isEmpty() || requesterPhone.isEmpty() || requesterMail.isEmpty() || requesterDesc.isEmpty() || requesterNIC.isEmpty() ) {
+			output = "Fields Are Empty !";
+		}
+		else {
+			output = fundObj.insertItem(requesterName, requesterPhone, requesterMail, requesterDesc,requesterNIC); 
+		}
 		return output; 
 	}
 	
@@ -75,7 +81,13 @@ public class fundService {
 	 String requesterMail = fundObject.get("requesterMail").getAsString(); 
 	 String requesterDesc = fundObject.get("requesterDesc").getAsString(); 
 	 String requesterNIC = fundObject.get("requesterNIC").getAsString();
-	 String output = fundObj.updateItem(fundID, requesterName, requesterPhone, requesterMail, requesterDesc, requesterNIC); 
+	 String output = "";
+		if( requesterName.isEmpty() || requesterPhone.isEmpty() || requesterMail.isEmpty() || requesterDesc.isEmpty() || requesterNIC.isEmpty() ) {
+			output = "Fields Are Empty !";
+		}
+		else {
+			output = fundObj.updateItem(fundID, requesterName, requesterPhone, requesterMail, requesterDesc, requesterNIC); 
+		}
 	return output; 
 	}
 
