@@ -1,6 +1,10 @@
 package com;
 
 import model.fund;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 //For REST Service
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -46,7 +50,15 @@ public class fundService {
 			output = "Fields Are Empty !";
 		}
 		else {
-			output = fundObj.insertItem(requesterName, requesterPhone, requesterMail, requesterDesc,requesterNIC); 
+			String regex = "^(.+)@(.+)$";  
+	        Pattern pattern = Pattern.compile(regex);  
+	        Matcher matcher = pattern.matcher(requesterMail);  
+		        if(matcher.matches() == true ) {
+					output = fundObj.insertItem(requesterName, requesterPhone, requesterMail, requesterDesc,requesterNIC); 
+		        }
+		        else {
+		        	output = "Invalid E-Mail";
+		        }
 		}
 		return output; 
 	}
@@ -90,6 +102,4 @@ public class fundService {
 		}
 	return output; 
 	}
-
-
 }

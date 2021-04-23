@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class fund {
 	// A common method to connect to the DB
@@ -28,20 +30,54 @@ public class fund {
 			if (con == null) {
 				return "Error while connecting to the database for inserting.";
 			}
-			// create a prepared statement
-			String query = "insert into fund (fundID,requesterName,requesterPhone,requesterMail,requesterDesc,requesterNIC) values (?, ?, ?, ?, ?, ?);"; 
-			PreparedStatement preparedStmt = con.prepareStatement(query);
-			// binding values
-			preparedStmt.setInt(1, 0);
-			preparedStmt.setString(2, requesterName);
-			preparedStmt.setString(3, requesterPhone);
-			preparedStmt.setString(4, requesterMail);
-			preparedStmt.setString(5, requesterDesc);
-			preparedStmt.setString(6, requesterNIC);
-			// execute the statement
-			preparedStmt.execute();
-			con.close();
-			output = "Inserted successfully";
+			//Mail Validate
+			String regexMail = "^(.+)@(.+)$";  
+	        Pattern patternMail = Pattern.compile(regexMail);  
+	        Matcher matcherMail = patternMail.matcher(requesterMail); 
+	        
+	      //Mail Phone
+			String regexPhone = "^[0][0-9]{9}$";  
+	        Pattern patternPhone = Pattern.compile(regexPhone);  
+	        Matcher matcherPhone = patternPhone.matcher(requesterPhone); 
+	        
+	      //Mail NIC
+			String regexNIC = "^[0-9]{9}[vV]$";  
+	        Pattern patternNIC = Pattern.compile(regexNIC);  
+	        Matcher matcherNIC = patternNIC.matcher(requesterNIC); 
+	        
+		        if(matcherMail.matches() == true ) {
+		        	if(matcherPhone.matches() == true ) {
+		        		if(matcherNIC.matches() == true ) {
+		        			// create a prepared statement
+		    				String query = "insert into fund (fundID,requesterName,requesterPhone,requesterMail,requesterDesc,requesterNIC) values (?, ?, ?, ?, ?, ?);"; 
+		    				PreparedStatement preparedStmt = con.prepareStatement(query);
+		    				// binding values
+		    				preparedStmt.setInt(1, 0);
+		    				preparedStmt.setString(2, requesterName);
+		    				preparedStmt.setString(3, requesterPhone);
+		    				preparedStmt.setString(4, requesterMail);
+		    				preparedStmt.setString(5, requesterDesc);
+		    				preparedStmt.setString(6, requesterNIC);
+		    				// execute the statement
+		    				preparedStmt.execute();
+		    				con.close();
+		    				output = "Inserted successfully";
+				        }
+				        else 
+				        {
+				        	output = "Invalid NIC";
+				        }
+			        }
+			        else 
+			        {
+			        	output = "Invalid Phone Number";
+			        }
+		        }
+		        else 
+		        {
+		        	output = "Invalid E-Mail";
+		        }   
+			
 		} catch (Exception e) {
 			output = e.getMessage()+"  Error while inserting the item.";
 			System.err.println(e.getMessage());
@@ -103,21 +139,55 @@ public class fund {
 			if (con == null) {
 				return "Error while connecting to the database for updating.";
 			}
-			// create a prepared statement
-			String query = "UPDATE fund SET requesterName=?,requesterPhone=?,requesterMail=?,requesterDesc=? ,requesterNIC=? "
-					+ "WHERE fundID=?";
-			PreparedStatement preparedStmt = con.prepareStatement(query);
-			// binding values
-			preparedStmt.setString(1, requesterName);
-			preparedStmt.setString(2, requesterPhone);
-			preparedStmt.setString(3, requesterMail);
-			preparedStmt.setString(4, requesterDesc);
-			preparedStmt.setString(5, requesterNIC);
-			preparedStmt.setInt(6, Integer.parseInt(fundID));
-			// execute the statement
-			preparedStmt.execute();
-			con.close();
-			output = "Updated successfully";
+			//Mail Validate
+			String regexMail = "^(.+)@(.+)$";  
+	        Pattern patternMail = Pattern.compile(regexMail);  
+	        Matcher matcherMail = patternMail.matcher(requesterMail); 
+	        
+	      //Mail Phone
+			String regexPhone = "^[0][0-9]{9}$";  
+	        Pattern patternPhone = Pattern.compile(regexPhone);  
+	        Matcher matcherPhone = patternPhone.matcher(requesterPhone); 
+	        
+	      //Mail NIC
+			String regexNIC = "^[0-9]{9}[vV]$";  
+	        Pattern patternNIC = Pattern.compile(regexNIC);  
+	        Matcher matcherNIC = patternNIC.matcher(requesterNIC); 
+	        
+		        if(matcherMail.matches() == true ) {
+		        	if(matcherPhone.matches() == true ) {
+		        		if(matcherNIC.matches() == true ) {
+		        			// create a prepared statement
+		        			String query = "UPDATE fund SET requesterName=?,requesterPhone=?,requesterMail=?,requesterDesc=? ,requesterNIC=? "
+		        					+ "WHERE fundID=?";
+		        			PreparedStatement preparedStmt = con.prepareStatement(query);
+		        			// binding values
+		        			preparedStmt.setString(1, requesterName);
+		        			preparedStmt.setString(2, requesterPhone);
+		        			preparedStmt.setString(3, requesterMail);
+		        			preparedStmt.setString(4, requesterDesc);
+		        			preparedStmt.setString(5, requesterNIC);
+		        			preparedStmt.setInt(6, Integer.parseInt(fundID));
+		        			// execute the statement
+		        			preparedStmt.execute();
+		        			con.close();
+		        			output = "Updated successfully";
+				        }
+				        else 
+				        {
+				        	output = "Invalid NIC";
+				        }
+			        }
+			        else 
+			        {
+			        	output = "Invalid Phone Number";
+			        }
+		        }
+		        else 
+		        {
+		        	output = "Invalid E-Mail";
+		        } 
+			
 		} catch (Exception e) {
 			output = e.getMessage();
 			System.err.println(e.getMessage());
