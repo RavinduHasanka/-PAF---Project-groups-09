@@ -28,8 +28,51 @@ public class delivery {
 		try {
 			Connection con = connect();
 			if (con == null) {
-				return "Error while connecting to the database for inserting.";
+				return "Error while connecting to the database for Inserting.";
 			}
+
+			// mail validate
+			String regexMail = "^(.+)@(.+)$";
+			Pattern PatternMail = Pattern.compile(regexMail);
+			Matcher matcherMail = PatternMail.matcher(ReceiverMail);
+
+			// Phone no validate
+			String regexPhone = "^[0][0-9]{9}$ ";
+			Pattern PatternPhone = Pattern.compile(regexPhone);
+			Matcher matcherPhone = PatternPhone.matcher(ReceiverPhoneNo);
+			
+			if (matcherMail.matches() == true) {
+				if (matcherPhone.matches() == true) {
+
+					// create a prepared statement
+			String query = "insert into delivery (DeliveryID,ItemID,ReceiverName,ReceiverPhoneNo,ReceiverMail) values (?, ?, ?, ?, ?);";
+			PreparedStatement preparedStmt = con.prepareStatement(query);
+			
+					// binding values
+			preparedStmt.setInt(1, 0);
+			preparedStmt.setInt(2, Integer.parseInt(ItemID));
+			preparedStmt.setString(3, ReceiverName);
+			preparedStmt.setString(4, ReceiverPhoneNo);
+			preparedStmt.setString(5, ReceiverMail);
+			// execute the statement
+			preparedStmt.execute();
+			con.close();
+			output = "Inserted successfully";
+				} else {
+					output = "invalid Phone No";
+				}
+			} else {
+				output = "invalid E-Mail";
+			}
+		} catch (Exception e) {
+			output = e.getMessage() + "Error while inserting the items.";
+			System.err.println(e.getMessage());
+		}
+		return output;
+	}
+
+/*
+		
 			// create a prepared statement
 			String query = "insert into delivery (DeliveryID,ItemID,ReceiverName,ReceiverPhoneNo,ReceiverMail) values (?, ?, ?, ?, ?);";
 			PreparedStatement preparedStmt = con.prepareStatement(query);
@@ -49,6 +92,7 @@ public class delivery {
 		}
 		return output;
 	}
+	*/
 
 	public String readItems() {
 		String output = "";
@@ -135,7 +179,7 @@ public class delivery {
 				output = "invalid E-Mail";
 			}
 		} catch (Exception e) {
-			output = e.getMessage() + " While Updating";
+			output = e.getMessage() + " Error While Updating items";
 			System.err.println(e.getMessage());
 		}
 		return output;
@@ -158,7 +202,7 @@ public class delivery {
 			con.close();
 			output = "Deleted successfully";
 		} catch (Exception e) {
-			output = e.getMessage() + "  Error while deleting the item.";
+			output = e.getMessage() + "  Error while deleting the items.";
 			System.err.println(e.getMessage());
 		}
 		return output;
