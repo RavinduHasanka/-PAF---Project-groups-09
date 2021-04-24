@@ -32,7 +32,7 @@ public class deliveryService {
 	}
 	
 	@POST
-	@Path("/") 
+	@Path("/Insert") 
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED) 
 	@Produces(MediaType.TEXT_PLAIN) 
 	public String insertItem(@FormParam("ItemID") String ItemID, 
@@ -40,12 +40,18 @@ public class deliveryService {
 							@FormParam("ReceiverPhoneNo") String ReceiverPhoneNo, 
 							@FormParam("ReceiverMail") String ReceiverMail) 
 	{ 
-		String output = deliveryOb.insertDelivery(  ItemID ,  ReceiverName,  ReceiverPhoneNo,  ReceiverMail); 
+		String output = "";
+		if(ItemID.isEmpty()||ReceiverName.isEmpty()||ReceiverPhoneNo.isEmpty()||ReceiverMail.isEmpty() ) {
+			output ="Fields Are Empty !";
+		}
+		else {
+		output = deliveryOb.insertDelivery(  ItemID ,  ReceiverName,  ReceiverPhoneNo,  ReceiverMail); 
+		}
 		return output; 
 	}
 	
 	@DELETE
-	@Path("/") 
+	@Path("/Delete") 
 	@Consumes(MediaType.APPLICATION_XML) 
 	@Produces(MediaType.TEXT_PLAIN) 
 	public String deleteItem(String itemData) 
@@ -60,7 +66,7 @@ public class deliveryService {
 	}
 
 	@PUT
-	@Path("/") 
+	@Path("/Update") 
 	@Consumes(MediaType.APPLICATION_JSON) 
 	@Produces(MediaType.TEXT_PLAIN) 
 	public String updateItem(String itemData) 
@@ -73,9 +79,16 @@ public class deliveryService {
 	 String ReceiverName = fundObject.get("ReceiverName").getAsString(); 
 	 String ReceiverPhoneNo = fundObject.get("ReceiverPhoneNo").getAsString(); 
 	 String ReceiverMail = fundObject.get("ReceiverMail").getAsString(); 
-	 String output = deliveryOb.updateItem(DeliveryID, ItemID, ReceiverName, ReceiverPhoneNo, ReceiverMail); 
-	return output; 
+	 String output = "";
+		if(ItemID.isEmpty()||ReceiverName.isEmpty()||ReceiverPhoneNo.isEmpty()||ReceiverMail.isEmpty() ) {
+			output ="Fields Are Empty !";
+		}
+		else {
+		output = deliveryOb.insertDelivery(  ItemID ,  ReceiverName,  ReceiverPhoneNo,  ReceiverMail); 
+		}
+		return output; 
 	}
+	
 
 
 }

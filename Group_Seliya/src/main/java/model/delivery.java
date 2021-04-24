@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class delivery {
 	// A common method to connect to the DB
@@ -21,7 +23,7 @@ public class delivery {
 		return con;
 	}
 
-	public String insertDelivery(String ItemID , String ReceiverName, String ReceiverPhoneNo, String ReceiverMail) {
+	public String insertDelivery(String ItemID, String ReceiverName, String ReceiverPhoneNo, String ReceiverMail) {
 		String output = "";
 		try {
 			Connection con = connect();
@@ -29,7 +31,7 @@ public class delivery {
 				return "Error while connecting to the database for inserting.";
 			}
 			// create a prepared statement
-			String query = "insert into delivery (DeliveryID,ItemID,ReceiverName,ReceiverPhoneNo,ReceiverMail) values (?, ?, ?, ?, ?);"; 
+			String query = "insert into delivery (DeliveryID,ItemID,ReceiverName,ReceiverPhoneNo,ReceiverMail) values (?, ?, ?, ?, ?);";
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 			// binding values
 			preparedStmt.setInt(1, 0);
@@ -64,24 +66,21 @@ public class delivery {
 			ResultSet rs = stmt.executeQuery(query);
 			// iterate through the rows in the result set
 			while (rs.next()) {
-				String DeliveryID = Integer.toString(rs.getInt("DeliveryID")); 
-				 String ItemID = Integer.toString(rs.getInt("ItemID")); 
-				 String ReceiverName = rs.getString("ReceiverName"); 
-				 String ReceiverPhoneNo = rs.getString("ReceiverPhoneNo"); 
-				 String ReceiverMail = rs.getString("ReceiverMail"); 
-				 // Add into the html table
-				 output += "<tr><td>" + ItemID + "</td>"; 
-				 output += "<td>" + ReceiverName + "</td>"; 
-				 output += "<td>" + ReceiverPhoneNo + "</td>"; 
-				 output += "<td>" + ReceiverMail + "</td>"; 
-				 // buttons
-				 output += "<td><input name='btnUpdate' type='button' value='Update' "
-				 		+ "class='btn btn-secondary'></td>"
-				 		+ "<td><form method='post' action='items.jsp'>"
-				 		+ "<input name='btnRemove' type='submit' value='Remove'"
-				 		+ "class='btn btn-danger'>"
-				 		+ "<input name='itemID' type='hidden' value='" + DeliveryID
-				 		+ "'>" + "</form></td></tr>"; 
+				String DeliveryID = Integer.toString(rs.getInt("DeliveryID"));
+				String ItemID = Integer.toString(rs.getInt("ItemID"));
+				String ReceiverName = rs.getString("ReceiverName");
+				String ReceiverPhoneNo = rs.getString("ReceiverPhoneNo");
+				String ReceiverMail = rs.getString("ReceiverMail");
+				// Add into the html table
+				output += "<tr><td>" + ItemID + "</td>";
+				output += "<td>" + ReceiverName + "</td>";
+				output += "<td>" + ReceiverPhoneNo + "</td>";
+				output += "<td>" + ReceiverMail + "</td>";
+				// buttons
+				output += "<td><input name='btnUpdate' type='button' value='Update' "
+						+ "class='btn btn-secondary'></td>" + "<td><form method='post' action='items.jsp'>"
+						+ "<input name='btnRemove' type='submit' value='Remove'" + "class='btn btn-danger'>"
+						+ "<input name='itemID' type='hidden' value='" + DeliveryID + "'>" + "</form></td></tr>";
 			}
 			con.close();
 			// Complete the html table
@@ -93,29 +92,50 @@ public class delivery {
 		return output;
 	}
 
-	public String updateItem(String DeliveryID, String ItemID, String ReceiverName, String ReceiverPhoneNo, String ReceiverMail) {
+	public String updateItem(String DeliveryID, String ItemID, String ReceiverName, String ReceiverPhoneNo,
+			String ReceiverMail) {
 		String output = "";
 		try {
 			Connection con = connect();
 			if (con == null) {
 				return "Error while connecting to the database for updating.";
 			}
-			// create a prepared statement
-			String query = "UPDATE delivery SET ItemID=?,ReceiverName=?,ReceiverPhoneNo=?,ReceiverMail=? "
-					+ "WHERE DeliveryID=?";
-			PreparedStatement preparedStmt = con.prepareStatement(query);
-			// binding values
-			preparedStmt.setInt(1, Integer.parseInt(ItemID));
-			preparedStmt.setString(2, ReceiverName);
-			preparedStmt.setString(3, ReceiverPhoneNo);
-			preparedStmt.setString(4, ReceiverMail);
-			preparedStmt.setInt(5, Integer.parseInt(DeliveryID));
-			// execute the statement
-			preparedStmt.execute();
-			con.close();
-			output = "Updated successfully";
+
+			// mail validate
+			String regexMail = "^(.+)@(.+)$";
+			Pattern PatternMail = Pattern.compile(regexMail);
+			Matcher matcherMail = PatternMail.matcher(ReceiverMail);
+
+			// Phone validate
+			String regexPhone = "^[0][0-9]{9}$ ";
+			Pattern PatternPhone = Pattern.compile(regexPhone);
+			Matcher matcherPhone = PatternPhone.matcher(ReceiverPhoneNo);
+
+			if (matcherMail.matches() == true) {
+				if (matcherPhone.matches() == true) {
+
+					// create a prepared statement
+					String query = "UPDATE delivery SET ItemID=?,ReceiverName=?,ReceiverPhoneNo=?,ReceiverMail=? "
+							+ "WHERE DeliveryID=?";
+					PreparedStatement preparedStmt = con.prepareStatement(query);
+					// binding values
+					preparedStmt.setInt(1, Integer.parseInt(ItemID));
+					preparedStmt.setString(2, ReceiverName);
+					preparedStmt.setString(3, ReceiverPhoneNo);
+					preparedStmt.setString(4, ReceiverMail);
+					preparedStmt.setInt(5, Integer.parseInt(DeliveryID));
+					// execute the statement
+					preparedStmt.execute();
+					con.close();
+					output = "Updated successfully";
+				} else {
+					output = "invalid Phone No";
+				}
+			} else {
+				output = "invalid E-Mail";
+			}
 		} catch (Exception e) {
-			output = e.getMessage()+" While Updating";
+			output = e.getMessage() + " While Updating";
 			System.err.println(e.getMessage());
 		}
 		return output;
@@ -138,7 +158,7 @@ public class delivery {
 			con.close();
 			output = "Deleted successfully";
 		} catch (Exception e) {
-			output = e.getMessage()+"  Error while deleting the item.";
+			output = e.getMessage() + "  Error while deleting the item.";
 			System.err.println(e.getMessage());
 		}
 		return output;
