@@ -84,7 +84,7 @@ public class deliveryService {
 			output ="Fields Are Empty !";
 		}
 		else {
-		output = deliveryOb.insertDelivery(  ItemID ,  ReceiverName,  ReceiverPhoneNo,  ReceiverMail); 
+		output = deliveryOb.updateDelivery( DeliveryID,  ItemID ,  ReceiverName,  ReceiverPhoneNo,  ReceiverMail); 
 		}
 		return output; 
 	}

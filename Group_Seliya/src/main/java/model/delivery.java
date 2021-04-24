@@ -136,8 +136,7 @@ public class delivery {
 		return output;
 	}
 
-	public String updateItem(String DeliveryID, String ItemID, String ReceiverName, String ReceiverPhoneNo,
-			String ReceiverMail) {
+	public String updateDelivery(String DeliveryID, String ItemID, String ReceiverName, String ReceiverPhoneNo,String ReceiverMail) {
 		String output = "";
 		try {
 			Connection con = connect();
@@ -151,7 +150,7 @@ public class delivery {
 			Matcher matcherMail = PatternMail.matcher(ReceiverMail);
 
 			// Phone validate
-			String regexPhone = "^[0][0-9]{9}$ ";
+			String regexPhone = "^[0][0-9]{9}$";
 			Pattern PatternPhone = Pattern.compile(regexPhone);
 			Matcher matcherPhone = PatternPhone.matcher(ReceiverPhoneNo);
 
@@ -172,10 +171,14 @@ public class delivery {
 					preparedStmt.execute();
 					con.close();
 					output = "Updated successfully";
-				} else {
+				} 
+				else 
+				{
 					output = "invalid Phone No";
 				}
-			} else {
+			} 
+			else 
+			{
 				output = "invalid E-Mail";
 			}
 		} catch (Exception e) {
