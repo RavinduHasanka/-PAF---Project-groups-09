@@ -17,15 +17,23 @@ import org.jsoup.*;
 import org.jsoup.parser.*;
 import org.jsoup.nodes.Document;
 
-@Path("/Items")
+@Path("/Funds")
 public class fundService {
 	fund fundObj = new fund();
 
 	@GET
-	@Path("/")
+	@Path("/ReadAll")
 	@Produces(MediaType.TEXT_HTML)
 	public String readItems() {
-		return fundObj.readItems();
+		return fundObj.readFunds();
+	}
+	
+	@GET
+	@Path("/ReadOnce/{ID}")
+	@Produces(MediaType.TEXT_HTML)
+	public String readItem(@PathParam("ID") String ID) 
+	{ 
+		return fundObj.readFund(ID); 
 	}
 
 	@GET
@@ -36,10 +44,10 @@ public class fundService {
 	}
 	
 	@POST
-	@Path("/") 
+	@Path("/Insert") 
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED) 
 	@Produces(MediaType.TEXT_PLAIN) 
-	public String insertItem(@FormParam("requesterName") String requesterName, 
+	public String insertFund(@FormParam("requesterName") String requesterName, 
 							@FormParam("requesterPhone") String requesterPhone, 
 							@FormParam("requesterMail") String requesterMail, 
 							@FormParam("requesterDesc") String requesterDesc,
@@ -50,36 +58,28 @@ public class fundService {
 			output = "Fields Are Empty !";
 		}
 		else {
-			String regex = "^(.+)@(.+)$";  
-	        Pattern pattern = Pattern.compile(regex);  
-	        Matcher matcher = pattern.matcher(requesterMail);  
-		        if(matcher.matches() == true ) {
-					output = fundObj.insertItem(requesterName, requesterPhone, requesterMail, requesterDesc,requesterNIC); 
-		        }
-		        else {
-		        	output = "Invalid E-Mail";
-		        }
+				output = fundObj.insertFund(requesterName, requesterPhone, requesterMail, requesterDesc,requesterNIC); 
 		}
 		return output; 
 	}
 	
 	@DELETE
-	@Path("/") 
+	@Path("/Delete") 
 	@Consumes(MediaType.APPLICATION_XML) 
 	@Produces(MediaType.TEXT_PLAIN) 
-	public String deleteItem(String fundData) 
+	public String deleteFund(String fundData) 
 	{ 
 	//Convert the input string to an XML document
 	 Document doc = Jsoup.parse(fundData, "", Parser.xmlParser()); 
 	 
 	//Read the value from the element <itemID>
 	 String fundID = doc.select("fundID").text(); 
-	 String output = fundObj.deleteItem(fundID); 
+	 String output = fundObj.deleteFund(fundID); 
 	return output; 
 	}
 
 	@PUT
-	@Path("/") 
+	@Path("/Update") 
 	@Consumes(MediaType.APPLICATION_JSON) 
 	@Produces(MediaType.TEXT_PLAIN) 
 	public String updateItem(String fundData) 
@@ -98,7 +98,7 @@ public class fundService {
 			output = "Fields Are Empty !";
 		}
 		else {
-			output = fundObj.updateItem(fundID, requesterName, requesterPhone, requesterMail, requesterDesc, requesterNIC); 
+			output = fundObj.updateFund(fundID, requesterName, requesterPhone, requesterMail, requesterDesc, requesterNIC); 
 		}
 	return output; 
 	}

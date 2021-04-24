@@ -23,7 +23,7 @@ public class fund {
 		return con;
 	}
 
-	public String insertItem(String requesterName, String requesterPhone, String requesterMail, String requesterDesc , String requesterNIC) {
+	public String insertFund(String requesterName, String requesterPhone, String requesterMail, String requesterDesc , String requesterNIC) {
 		String output = "";
 		try {
 			Connection con = connect();
@@ -79,13 +79,13 @@ public class fund {
 		        }   
 			
 		} catch (Exception e) {
-			output = e.getMessage()+"  Error while inserting the item.";
+			output = "Error while inserting";
 			System.err.println(e.getMessage());
 		}
 		return output;
 	}
 
-	public String readItems() {
+	public String readFunds() {
 		String output = "";
 		try {
 			Connection con = connect();
@@ -131,8 +131,47 @@ public class fund {
 		}
 		return output;
 	}
+	
+	
+	public String readFund(String ID) {
+		String output = "";
+		try {
+			Connection con = connect();
+			if (con == null) {
+				return "Error while connecting to the database for reading.";
+			}
 
-	public String updateItem(String fundID, String requesterName, String requesterPhone, String requesterMail, String requesterDesc ,String requesterNIC) {
+			int fundID=Integer.parseInt(ID); 
+			
+			String query = "select * from fund where fundID ="+ fundID +"";
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			// iterate through the rows in the result set
+			while (rs.next()) {
+				 
+				 String requesterName = rs.getString("requesterName"); 
+				 String requesterPhone = rs.getString("requesterPhone"); 
+				 String requesterMail = rs.getString("requesterMail"); 
+				 String requesterDesc = rs.getString("requesterDesc"); 
+				 String requesterNIC = rs.getString("requesterNIC");
+				 // Add into the html table
+				 output +=" <p> Requester Name : "  +requesterName+ " </p> <br>"
+				 		+ "<p> Requester Phone : "  +requesterPhone+ " </p> <br>"
+				 		+ "<p> Requester Mail : "  +requesterMail+ " </p> <br>"
+				 		+ "<p> Requester Description  : "  +requesterDesc+ " </p> <br>"
+				 		+ "<p> Requester NIC : "  +requesterNIC+ " </p>";
+			}
+			con.close();
+			
+		} catch (Exception e) {
+			output = "Error while reading the items.";
+			System.err.println(e.getMessage());
+		}
+		return output;
+	}
+	
+
+	public String updateFund(String fundID, String requesterName, String requesterPhone, String requesterMail, String requesterDesc ,String requesterNIC) {
 		String output = "";
 		try {
 			Connection con = connect();
@@ -189,13 +228,13 @@ public class fund {
 		        } 
 			
 		} catch (Exception e) {
-			output = e.getMessage();
+			output = "Error while updating";
 			System.err.println(e.getMessage());
 		}
 		return output;
 	}
 
-	public String deleteItem(String fundID) {
+	public String deleteFund(String fundID) {
 		String output = "";
 		try {
 			Connection con = connect();
@@ -212,7 +251,7 @@ public class fund {
 			con.close();
 			output = "Deleted successfully";
 		} catch (Exception e) {
-			output = "Error while deleting the item.";
+			output = "Error while deleting";
 			System.err.println(e.getMessage());
 		}
 		return output;
