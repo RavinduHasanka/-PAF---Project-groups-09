@@ -28,7 +28,7 @@ public class fund {
 		try {
 			Connection con = connect();
 			if (con == null) {
-				return "Error while connecting to the database for inserting.";
+				return "Error while connecting to the database for inserting";
 			}
 			//Mail Validate
 			String regexMail = "^(.+)@(.+)$";  
@@ -90,7 +90,7 @@ public class fund {
 		try {
 			Connection con = connect();
 			if (con == null) {
-				return "Error while connecting to the database for reading.";
+				return "Error while connecting to the database for reading";
 			}
 			// Prepare the html table to be displayed
 			output = "<table border='1'><tr><th>Requester Name</th><th>Requester Phone</th>" + "<th>Requester Mail</th>"

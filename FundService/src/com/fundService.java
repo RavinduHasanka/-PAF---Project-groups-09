@@ -55,7 +55,7 @@ public class fundService {
 	{ 
 		String output = "";
 		if( requesterName.isEmpty() || requesterPhone.isEmpty() || requesterMail.isEmpty() || requesterDesc.isEmpty() || requesterNIC.isEmpty() ) {
-			output = "Fields Are Empty !";
+			output = "Please Fill All Fields !";
 		}
 		else {
 				output = fundObj.insertFund(requesterName, requesterPhone, requesterMail, requesterDesc,requesterNIC); 
@@ -95,7 +95,7 @@ public class fundService {
 	 String requesterNIC = fundObject.get("requesterNIC").getAsString();
 	 String output = "";
 		if( requesterName.isEmpty() || requesterPhone.isEmpty() || requesterMail.isEmpty() || requesterDesc.isEmpty() || requesterNIC.isEmpty() ) {
-			output = "Fields Are Empty !";
+			output = "Please Fill All Fields !";
 		}
 		else {
 			output = fundObj.updateFund(fundID, requesterName, requesterPhone, requesterMail, requesterDesc, requesterNIC); 
