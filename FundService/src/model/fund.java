@@ -79,7 +79,7 @@ public class fund {
 		        }   
 			
 		} catch (Exception e) {
-			output = "Error while inserting";
+			output = e.getMessage()+" Error while inserting";
 			System.err.println(e.getMessage());
 		}
 		return output;
@@ -126,7 +126,7 @@ public class fund {
 			// Complete the html table
 			output += "</table>";
 		} catch (Exception e) {
-			output = "Error while reading the items.";
+			output = e.getMessage()+"   Error while reading the items.";
 			System.err.println(e.getMessage());
 		}
 		return output;
