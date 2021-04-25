@@ -5,7 +5,7 @@
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
   <build>
-    <sourceDirectory>src</sourceDirectory>
+   <sourceDirectory>src</sourceDirectory>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -26,6 +26,7 @@
   </build>
   <!-- add dependencies  -->
   <dependencies>
+<<<<<<< HEAD
 		<dependency>
 			<groupId>javax.ws.rs</groupId>
 			<artifactId>javax.ws.rs-api</artifactId>
@@ -93,4 +94,38 @@
 			<version>20180813</version>
 		</dependency>
 	</dependencies>
+=======
+  
+  	<dependency>
+  		<groupId>com.sun.jersey</groupId>
+  		<artifactId>jersey-bundle</artifactId>
+  		<version>1.19.4</version>
+  	</dependency>
+  	<dependency>
+ 		<groupId>com.sun.jersey</groupId>
+  		<artifactId>jersey-core</artifactId>
+  		<version>1.19.4</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>com.sun.jersey</groupId>
+  		<artifactId>jersey-server</artifactId>
+  		<version>1.19.4</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>mysql</groupId>
+  		<artifactId>mysql-connector-java</artifactId>
+  		<version>8.0.19</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>com.google.code.gson</groupId>
+  		<artifactId>gson</artifactId>
+  		<version>2.2.3</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.jsoup</groupId>
+  		<artifactId>jsoup</artifactId>
+  		<version>1.8.1</version>
+  	</dependency>
+  </dependencies>
+>>>>>>> Hasanka
 </project>
