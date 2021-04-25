@@ -25,12 +25,12 @@
     </plugins>
   </build>
   <dependencies>
+    <!--pom file code changes to master branch to new branch-->
   	<dependency>
   		<groupId>com.sun.jersey</groupId>
   		<artifactId>jersey-bundle</artifactId>
   		<version>1.19.4</version>
   	</dependency>
-  	
   	<dependency>
   		<groupId>com.sun.jersey</groupId>
   		<artifactId>jersey-core</artifactId>
