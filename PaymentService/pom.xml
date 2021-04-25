@@ -24,7 +24,6 @@
       </plugin>
     </plugins>
   </build>
-  <!-- add dependencies  -->
   <dependencies>
   	<dependency>
   		<groupId>com.sun.jersey</groupId>
